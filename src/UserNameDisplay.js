@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import AddUserForm from "AddUserForm"
+import AddUserForm from "./AddUserForm"
 
 class UserNameDisplay extends Component {
     constructor() {
@@ -39,7 +39,7 @@ class UserNameDisplay extends Component {
         } else {
             for (let i = 0; i < arr.length; i += 5) {
                 if ( i + 5 > arr.length) {
-                    let slicedArr = arr.slice(i, arr.length - 1)
+                    let slicedArr = arr.slice(i)
                     finalArr.push(slicedArr)
                 } else {
                     let slicedArr = arr.slice(i, i + 5)
@@ -101,7 +101,7 @@ class UserNameDisplay extends Component {
                 {this.state.setsOfFiveUsers && this.state.setsOfFiveUsers[this.state.displayPage] ?
                 this.state.setsOfFiveUsers[this.state.displayPage].map(user => {
                     return (
-                        <div key={user.id}>{user.name}</div>
+                        <div key={user.email}>{user.name}</div>
                     )
                 }) : null}
                 <div>
