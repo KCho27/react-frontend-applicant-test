@@ -7,7 +7,8 @@ class UserNameDisplay extends Component {
             displayPage : 0,
             setsOfFiveUsers: []
         }
-        this.setsOfFiveCreator = this.setsOfFiveCreator.bind(this)
+        this.increasePage = this.increasePage.bind(this)
+        this.decreasePage = this.decreasePage.bind(this)
     }
 
     async componentDidMount() {
@@ -42,6 +43,18 @@ class UserNameDisplay extends Component {
         return finalArr
     }
 
+    increasePage () {
+        this.setState({
+            displayPage: this.state.displayPage + 1
+        })
+    }
+
+    decreasePage() {
+        this.setState({
+            displayPage: this.state.displayPage - 1
+        })
+    }
+
     render() {
         return (
             <div>
@@ -51,6 +64,12 @@ class UserNameDisplay extends Component {
                         <div key={user.id}>{user.name}</div>
                     )
                 }) : null}
+                <div>
+                    {this.state.displayPage !== 0 ? <button onClick={this.decreasePage}>Previous</button> : null}
+                    {this.state.displayPage < this.state.setsOfFiveUsers.length - 1 ? 
+                        <button onClick={this.increasePage}>Next</button>
+                        : null}
+                </div>
             </div>
         )
     }
