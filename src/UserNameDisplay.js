@@ -12,8 +12,10 @@ class UserNameDisplay extends Component {
         try {
             let fetchedData = await fetch("https://jsonplaceholder.typicode.com/users")
             let jsonedData = await fetchedData.json()
+            let sortedData = jsonedData.sort((a,b) => a.name !== b.name ? a.name < b.name ? -1 : 1 : 0)
+            console.log("sorted", sortedData)
             this.setState({
-                user: jsonedData
+                user: sortedData
             })
         } catch (error) {
             console.error(error)
