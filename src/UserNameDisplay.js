@@ -69,16 +69,16 @@ class UserNameDisplay extends Component {
     }
 
     handleSubmit = event => {
+        event.preventDefault()
         let firstAndLastName = this.state.name.split(" ")
         if (firstAndLastName.length !== 2) {
             alert("You Must Enter A First AND Last Name")
-        } else if (!this.state.email.endsWith(".com") 
+        } else if (!this.state.email.includes(".")
                   || !this.state.email.includes("@")
                   || this.state.email.startsWith("@")
-                  || this.state.email.startsWith(".com")) {
+                  || this.state.email.startsWith(".")) {
                       alert("You Must Enter A Valid Email")
         } else {
-            event.preventDefault()
             let newUser = {
                 name: this.state.name, 
                 email: this.state.email
@@ -100,15 +100,20 @@ class UserNameDisplay extends Component {
             <div>
                 {this.state.setsOfFiveUsers && this.state.setsOfFiveUsers[this.state.displayPage] ?
                 this.state.setsOfFiveUsers[this.state.displayPage].map(user => {
-                    return (
-                        <div key={user.email}>{user.name}</div>
-                    )
+                    if(user.email.endsWith(".biz")){
+                    return (<div key={user.email} style={{color:"green"}}>{user.name}</div>)
+                    } else {
+                        return(<div key={user.email}>{user.name}</div>)
+                    }
                 }) : null}
                 <div>
                     {this.state.displayPage !== 0 ? <button onClick={this.decreasePage}>Previous</button> : null}
                     {this.state.displayPage < this.state.setsOfFiveUsers.length - 1 ? 
                         <button onClick={this.increasePage}>Next</button>
                         : null}
+                </div>
+                <div>
+                    Page {this.state.displayPage + 1} of {this.state.setsOfFiveUsers.length}
                 </div>
                 <div>
                     <AddUserForm 
