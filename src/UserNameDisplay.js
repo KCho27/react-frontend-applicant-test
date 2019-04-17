@@ -1,14 +1,20 @@
 import React, { Component } from "react"
+import AddUserForm from "AddUserForm"
 
 class UserNameDisplay extends Component {
     constructor() {
         super()
         this.state = {
+            users: [],
             displayPage : 0,
-            setsOfFiveUsers: []
+            setsOfFiveUsers: [],
+            name: "",
+            email: ""
         }
         this.increasePage = this.increasePage.bind(this)
         this.decreasePage = this.decreasePage.bind(this)
+        this.handleChange = this.handleChange.bind(this)
+        this.handleSubmit = this.handleSubmit.bind(this)
     }
 
     async componentDidMount() {
@@ -18,6 +24,7 @@ class UserNameDisplay extends Component {
             let sortedData = jsonedData.sort((a,b) => a.name !== b.name ? a.name < b.name ? -1 : 1 : 0)
             let setsOfFive = this.setsOfFiveCreator(sortedData)
             this.setState({
+                users: sortedData,
                 setsOfFiveUsers: setsOfFive
             })
         } catch (error) {
@@ -55,6 +62,39 @@ class UserNameDisplay extends Component {
         })
     }
 
+    handleChange = event => {
+        this.setState({
+            [event.currentTarget.name] : event.currentTarget.value
+        })
+    }
+
+    handleSubmit = event => {
+        let firstAndLastName = this.state.name.split(" ")
+        if (firstAndLastName.length !== 2) {
+            alert("You Must Enter A First AND Last Name")
+        } else if (!this.state.email.endsWith(".com") 
+                  || !this.state.email.includes("@")
+                  || this.state.email.startsWith("@")
+                  || this.state.email.startsWith(".com")) {
+                      alert("You Must Enter A Valid Email")
+        } else {
+            event.preventDefault()
+            let newUser = {
+                name: this.state.name, 
+                email: this.state.email
+            }
+            let newUserList = [...this.state.users, newUser]
+            let newSortedUsers = newUserList.sort((a,b) => a.name !== b.name ? a.name < b.name ? -1 : 1 : 0)
+            let newSetsOfFive = this.setsOfFiveCreator(newSortedUsers)
+            this.setState({
+                users: newSortedUsers,
+                setsOfFiveUsers: newSetsOfFive,
+                name: "",
+                email: ""
+            })
+        }
+    }
+
     render() {
         return (
             <div>
@@ -69,6 +109,13 @@ class UserNameDisplay extends Component {
                     {this.state.displayPage < this.state.setsOfFiveUsers.length - 1 ? 
                         <button onClick={this.increasePage}>Next</button>
                         : null}
+                </div>
+                <div>
+                    <AddUserForm 
+                    {...this.state}
+                    handleChange={this.handleChange} 
+                    handleSubmit={this.handleSubmit}
+                    />
                 </div>
             </div>
         )
